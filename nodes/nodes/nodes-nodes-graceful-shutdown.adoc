@@ -1,0 +1,45 @@
+:_content-type: ASSEMBLY
+[id="nodes-nodes-graceful-shutdown"]
+
+= Managing Graceful Node Shutdown
+include::_attributes/common-attributes.adoc[]
+:context: nodes-nodes-graceful-shutdown
+
+toc::[]
+
+// The following include statements pull in the module files that comprise
+// the assembly. Include any combination of concept, procedure, or reference
+// modules required to cover the user story. You can also include other
+// assemblies.
+
+Graceful Node Shutdown (GNS) enables kubelet to delay forcible eviction of pods in the event of a node shutdown.
+This is important for users who want to ensure that workloads that execute critical operations cannot be interrupted.
+For example, if an operator that flashes network card firmware is shut in a disorderly fashion, hardware damage can be the result.
+Instead, the operator can use GNS to prevent damage from an unexpected reboot initiated by the MachineConfigOperator.
+
+GNS gives admins the ability to specify a termination grace period.
+The value chosen for termination grace period must be sufficient to give protected workloads time for the pod to shut down in an orderly manner.
+This may need to also consider operations that are monitoring the activity of sensitive workloads.
+The user will want both to continue until the workload completes.
+Users can also tag workloads to specify the order of shut down.
+
+When the user requests deletion of a pod, the cluster records and tracks the intended grace period before the pod is cleared for forceful termination. With that forceful shutdown tracking in place, the kubelet attempts graceful shutdown.   
++
+[NOTE]
+====
+GNS depends on systemd to take advantage of systemd inhibitor locks to delay the node shutdown with a given duration.
+
+GNS is controlled with the `GracefulNodeShutdown` feature gate which is enabled by default in {product-title} 4.13 and above.
+====
+
+
+
+
+
+.Additional information
+
+The content of this section is a placeholder for further information relating to graceful shutdown of nodes.
+
+.Additional information
+
+For information on etcd data backup, see xref:../../backup_and_restore/control_plane_backup_and_restore/backing-up-etcd.adoc#backup-etcd[Backing up etcd data].
